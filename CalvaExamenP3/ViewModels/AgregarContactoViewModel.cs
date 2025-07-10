@@ -49,6 +49,39 @@ namespace CalvaExamenP3.ViewModels
         {
             try
             {
+                // Validaciones antes de guardar
+                if (string.IsNullOrWhiteSpace(Nombre))
+                {
+                    await Application.Current.MainPage.DisplayAlert("Error", "El nombre es obligatorio", "OK");
+                    return;
+                }
+
+                if (string.IsNullOrWhiteSpace(Correo))
+                {
+                    await Application.Current.MainPage.DisplayAlert("Error", "El correo es obligatorio", "OK");
+                    return;
+                }
+
+                if (string.IsNullOrWhiteSpace(Telefono))
+                {
+                    await Application.Current.MainPage.DisplayAlert("Error", "El teléfono es obligatorio", "OK");
+                    return;
+                }
+
+                // Verificar si el teléfono ya existe
+                if (_repo.ExisteTelefono(Telefono))
+                {
+                    await Application.Current.MainPage.DisplayAlert("Error", "Ya existe un contacto con este número de teléfono", "OK");
+                    return;
+                }
+
+                // Verificar si el correo ya existe
+                if (_repo.ExisteCorreo(Correo))
+                {
+                    await Application.Current.MainPage.DisplayAlert("Error", "Ya existe un contacto con este correo electrónico", "OK");
+                    return;
+                }
+
                 var nuevo = new Contacto
                 {
                     Nombre = this.Nombre,
@@ -59,15 +92,21 @@ namespace CalvaExamenP3.ViewModels
 
                 _repo.AgregarContacto(nuevo);
                 await LogsRepository.AppendLogAsync(nuevo.Nombre);
+                await Application.Current.MainPage.DisplayAlert("Éxito", "Contacto guardado correctamente", "OK");
 
-                await Application.Current.MainPage.DisplayAlert("Éxito", "Contacto guardado", "OK");
-
+                // Limpiar los campos
                 Nombre = Correo = Telefono = string.Empty;
                 Favorito = false;
             }
+            catch (ArgumentException ex)
+            {
+                // Error de validación del teléfono ecuatoriano
+                await Application.Current.MainPage.DisplayAlert("Error", ex.Message, "OK");
+            }
             catch (Exception ex)
             {
-                await Application.Current.MainPage.DisplayAlert("Error", ex.Message, "OK");
+                // Cualquier otro error
+                await Application.Current.MainPage.DisplayAlert("Error", $"Error al guardar el contacto: {ex.Message}", "OK");
             }
         }
 

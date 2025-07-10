@@ -4,10 +4,19 @@ namespace CalvaExamenP3.Views
 {
     public partial class RegistrosPage : ContentPage
     {
+        private RegistrosViewModel viewModel;
+
         public RegistrosPage()
         {
             InitializeComponent();
-            BindingContext = new RegistrosViewModel();
+            viewModel = new RegistrosViewModel();
+            BindingContext = viewModel;
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            viewModel?.CargarContactos();
         }
     }
 }
