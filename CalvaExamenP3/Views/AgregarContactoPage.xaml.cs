@@ -1,9 +1,23 @@
-namespace CalvaExamenP3.Views;
+using CalvaExamenP3.ViewModels;
 
-public partial class AgregarContactoPage : ContentPage
+namespace CalvaExamenP3.Views
 {
-	public AgregarContactoPage()
-	{
-		InitializeComponent();
-	}
+    public partial class AgregarContactoPage : ContentPage
+    {
+        private AgregarContactoViewModel viewModel;
+
+        public AgregarContactoPage()
+        {
+            InitializeComponent();
+            viewModel = BindingContext as AgregarContactoViewModel;
+        }
+
+        private async void BtnGuardarContacto_Clicked(object sender, EventArgs e)
+        {
+            if (viewModel != null)
+            {
+                await viewModel.GuardarAsync();
+            }
+        }
+    }
 }

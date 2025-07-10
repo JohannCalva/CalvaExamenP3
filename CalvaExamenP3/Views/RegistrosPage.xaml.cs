@@ -1,9 +1,13 @@
-namespace CalvaExamenP3.Views;
+using CalvaExamenP3.ViewModels;
 
-public partial class RegistrosPage : ContentPage
+namespace CalvaExamenP3.Views
 {
-	public RegistrosPage()
-	{
-		InitializeComponent();
-	}
+    public partial class RegistrosPage : ContentPage
+    {
+        public RegistrosPage()
+        {
+            InitializeComponent();
+            BindingContext = new RegistrosViewModel();
+        }
+    }
 }
